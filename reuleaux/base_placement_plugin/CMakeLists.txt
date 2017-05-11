@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 
 project(base_placement_plugin)
-add_compile_options(-std=c++11)
-add_compile_options(-std=gnu++11)
-add_compile_options(-fext-numeric-literals)
-list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
-SET(CMAKE_CXX_COMPILER "/usr/bin/mpic++")
+
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS
   interactive_markers
@@ -21,10 +17,13 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
 )
 
+find_package(HDF5 REQUIRED)
+
 find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
 
 include(${QT_USE_FILE})
-set(HDF5_INCLUDE_DIR "/usr/include/hdf5/serial" "/usr/lib/x86_64-linux-gnu/hdf5/serial/include")
+
+link_directories("/usr/lib/x86_64-linux-gnu/hdf5/openmpi" "~/catkin_ws/devel/lib")
 
 add_definitions(-DQT_NO_KEYWORDS)
 
@@ -58,6 +57,7 @@ set(base_placement_plugin_INCLUDE_DIRECTORIES
 
 catkin_package(
   INCLUDE_DIRS ${base_placement_plugin_INCLUDE_DIRECTORIES}
+  ${map_creator_INCLUDE_DIRS}
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS
   interactive_markers
@@ -69,14 +69,15 @@ catkin_package(
   visualization_msgs
   map_creator
 )
-set(HDF5_INCLUDE_DIR "/usr/include/hdf5/serial" "/usr/lib/x86_64-linux-gnu/hdf5/serial/include")
+
 qt4_wrap_cpp(base_placement_plugin_MOCS ${base_placement_plugin_HDRS})
 qt4_wrap_ui(base_placement_plugin_UIS_H ${base_placement_plugin_UIS})
 
-include_directories(${base_placement_plugin_INCLUDE_DIRECTORIES} ${catkin_INCLUDE_DIRS} ${HDF5_INCLUDE_DIR})
+include_directories(${base_placement_plugin_INCLUDE_DIRECTORIES}  ${catkin_INCLUDE_DIRS} ${HDF5_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME} ${base_placement_plugin_SRCS} ${base_placement_plugin_MOCS} ${base_placement_plugin_UIS_H}) # ${base_placement_plugin_UIS_H}
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${HDF5_INCLUDE_DIR} yaml-cpp -lhdf5_serial -lhdf5_cpp)
-## target_link_libraries(${PROJECT_NAME} yaml-cpp)
+
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${HDF5_LIBRARIES} yaml-cpp -lhdf5_serial -lhdf5_cpp hdf5_dataset sphere_discretization kinematics)
 
 find_package(class_loader)
 class_loader_hide_library_symbols(${PROJECT_NAME})

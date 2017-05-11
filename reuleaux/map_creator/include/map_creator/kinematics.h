@@ -4,12 +4,7 @@
 
 #define IK_VERSION 61
 // #include "mh5_ikfast.cpp"
-// #include "base_arm_5D.cpp"
-// #include "arm_mount_6D.cpp"
-// #include "lea_arm_basic_6D.cpp"
-// #include "overall_robot_6D.cpp"
-#include "lea_arm_mount2_6D.cpp"
-
+#include "overall_robot_6D.cpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
