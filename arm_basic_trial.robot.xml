@@ -1,4 +1,4 @@
-<robot file="base_arm.dae">
+<robot file="arm_basic_link.dae">
 <Manipulator name="arm_kin_chain">
    <!-- tip -->
    <effector>link4</effector>
