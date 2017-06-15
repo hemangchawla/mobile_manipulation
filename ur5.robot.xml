@@ -1,0 +1,10 @@
+<robot file="ur5.dae">
+<Manipulator name="arm_kin_chain">
+   <!-- tip -->
+   <effector>ee_link</effector>
+   <!-- origin -->
+   <base>base</base>
+
+   <!-- no additional info is required since it is a leg -->
+</Manipulator>
+</robot>
