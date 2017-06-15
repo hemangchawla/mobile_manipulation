@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <arg name="debug" default="false" />
-  <arg unless="$(arg debug)" name="launch_prefix" value="" />
-  <arg if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
-  
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find base_placement_plugin)/rviz/base_placement.rviz" required="true" output="screen" launch-prefix="$(arg launch_prefix)"/>
-</launch>
