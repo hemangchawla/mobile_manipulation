@@ -12,9 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   moveit_ros_planning_interface
   moveit_core
-  moveit_ros_move_group
-  trac_ik_lib
-  trac_ik_kinematics_plugin
   interactive_markers
 )
 
@@ -65,11 +62,6 @@ install(TARGETS sphere_discretization kinematics hdf5_dataset
 install(DIRECTORY include/${PROJECT_NAME}/
  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
-
-# For now we let kinematics be part of the target link library.
-#add_executable(create_collision_reachability_map src/create_collision_reachability_map.cpp)
-#add_dependencies(create_collision_reachability_map ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-#target_link_libraries(create_collision_reachability_map sphere_discretization kinematics  hdf5_dataset ${catkin_LIBRARIES})
 
 add_executable(create_reachability_map src/create_reachability_map.cpp)
 add_dependencies(create_reachability_map ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
