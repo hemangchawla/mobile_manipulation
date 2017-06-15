@@ -1,0 +1,10 @@
+<robot file="base_primitive_with_new_arm.dae">
+<Manipulator name="arm_kin_chain">
+   <!-- tip -->
+   <effector>link4</effector>
+   <!-- origin -->
+   <base>link0</base>
+
+   <!-- no additional info is required since it is a leg -->
+</Manipulator>
+</robot>

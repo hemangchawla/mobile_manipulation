@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<robot name="Base_arm">
+
+  <!-- We want to use the ROS conventions in the URDF. -->
+  <!-- Hence x faces forward; y faces to the left; z faces upwards.  -->
+
+  <!-- OLD DIMENSION VALUES -->
+  <!-- Lea dimentions: xbase=0.55 ybase= 0.428 zbase=~0.932 -->
+  <!-- Lea positions from center base: x=0 y=0 z=rweel+zbase/2=0.666  -->
+
+  <!-- Lea wheel dimentions: rwheel=0.20 twheel=~0.04 rcwheel=0.2 twheel=~0.03 -->
+
+  <!-- Lea wheel positions from center base: xwheel=0.275 ywheel=0.214 zwheel=rwheel=0.20  -->
+  <!-- Lea custerwheel positions from center base: xcwheel=0.203 ycwheel=-0.214 zcwheel=rwheel=0.20  -->
+
+  <!-- Note: The base_link frame is on the ground between the wheels -->
+
+  <!-- MAIN LINK FRAME -->
+  <link name="base_link">
+    <origin xyz="0.000 0.000 0.000" rpy="0.000 0.000 0.000"/>
+  </link>
+
+  <!-- MID WHEELS LINK FRAME  -->
+  <link name="mid_wheels_virtual_link">
+    <origin xyz="0.000 0.000 0.000" rpy="0.000 0.000 0.000"/>
+  </link>
+
+  <!-- VIRTUAL JOINT BASE_LINK TO MID_WHEELS -->
+  <joint name="base_link_to_mid_wheels_virtual_link" type="fixed">
+    <axis xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="mid_wheels_virtual_link"/>
+    <origin xyz="0.000 0.000 0.1" rpy="0.000 0.000 0.000"/>
+    <!-- Increasing height by 0.15 i.e. 0.275+0.15  so that the wheels and the body does not intersect -->
+  </joint>
+
+  <!-- MAIN BODY -->
+  <link name="main_body">
+    <visual>
+      <origin xyz="0.000 0.000 0.000" rpy="0.000 0.000 0.000"/>
+      <geometry>
+        <box size="0.6 0.55 0.55"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+     </material>
+    </visual>
+  </link>
+
+  <!-- VIRTUAL JOINT MID_WHEELS TO BODY -->
+  <joint name="mid_wheels_virtual_link_to_body" type="fixed">
+    <axis xyz="1 0 0" rpy="0 0 0"/>
+    <parent link="mid_wheels_virtual_link"/>
+    <child link="main_body"/>
+    <origin xyz="0.3 0.000 0.425" rpy="0.000 0.000 0.000"/>
+    <!-- Increasing height by 0.15 i.e. 0.275+0.15  so that the wheels and the body does not intersect -->
+  </joint>
+
+  <!-- REAR WHEELS -->
+
+  <!-- REAR LEFT WHEEL -->
+  <link name="rear_left_wheel">
+    <visual>
+      <origin xyz="0.000 0.000 0.000" rpy="1.57079632679 0.000 0.000"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.04"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- REAR RIGHT WHEEL -->
+  <link name="rear_right_wheel">
+    <visual>
+      <origin xyz="0.000 0.000 0.000" rpy="1.57079632679 0.000 0.000"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.04"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- REAR WHEEL JOINTS -->
+
+  <!-- LEFT WHEEL JOINT -->
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <!-- the wheel axis is the z axis -->
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <parent link="mid_wheels_virtual_link"/>
+    <child link="rear_left_wheel"/>
+    <origin xyz="0.000 0.275 0.000" rpy="0.000 0.000 0.000"/>
+  </joint>
+
+
+  <!-- RIGHT WHEEL JOINT -->
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <!-- the wheel axis is the z axis -->
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <parent link="mid_wheels_virtual_link"/>
+    <child link="rear_right_wheel"/>
+    <origin xyz="0.000 -0.275 0.000" rpy="0.000 0.000 0.000"/>
+  </joint>
+
+  <!-- CASTER VIRTUAL LINKS -->
+
+  <!-- CASTER VIRTUAL LEFT LINK -->
+  <link name="caster_left_virtual_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- CASTER VIRTUAL RIGHT LINK -->
+  <link name="caster_right_virtual_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- CASTER VIRTUAL JOINTS -->
+
+  <!-- LEFT -->
+  <joint name="caster_left_virtual_link_joint" type="continuous">
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <parent link="mid_wheels_virtual_link"/>
+    <child link="caster_left_virtual_link"/>
+    <origin xyz="0.600 0.2 0.000 " rpy="0 0 0"/>
+  </joint>
+
+  <!-- RIGHT -->
+  <joint name="caster_right_virtual_link_joint" type="continuous">
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <parent link="mid_wheels_virtual_link"/>
+    <child link="caster_right_virtual_link"/>
+    <origin xyz="0.600 -0.2 0.000 " rpy="0 0 0"/>
+  </joint>
+
+  <!-- CASTER WHEELS -->
+
+  <!-- CASTER LEFT WHEEL -->
+  <link name="caster_left_wheel">
+    <visual>
+      <origin xyz="0.0 0.000 0.000" rpy="1.57079632679 0.000 0.000"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.03"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- CASTER RIGHT WHEEL -->
+  <link name="caster_right_wheel">
+    <visual>
+      <origin xyz="0.00 0.000 0.000" rpy="1.57079632679 0.000 0.000"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.03"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- CASTER WHEEL JOINTS -->
+
+  <!-- LEFT -->
+  <joint name="caster_left_wheel_joint" type="continuous">
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <parent link="caster_left_virtual_link"/>
+    <child link="caster_left_wheel"/>
+    <origin xyz="0.05 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- RIGHT -->
+  <joint name="caster_right_wheel_joint" type="continuous">
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <parent link="caster_right_virtual_link"/>
+    <child link="caster_right_wheel"/>
+    <origin xyz="0.05 0 0" rpy="0 0 0"/>
+  </joint>
+
+
+<!-- ARM -->
+  <link name="link0">
+    <visual>
+      <geometry>
+        <box size="0.12 0.07 0.17"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint_arm_base" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 -3.14" xyz="0.395 0.24 0.15"/>
+    <parent link="main_body"/>
+    <child link="link0"/>
+  </joint>
+
+  <link name="bl">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.07 0.16"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="joint0" type="continuous">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-3" upper="3" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link0"/>
+    <child link="bl"/>
+  </joint>
+
+  <link name="link1">
+    <visual>
+      <geometry>
+        <box size="0.07 0.07 0.48"/>
+      </geometry>
+      <origin rpy="0 0 1.57" xyz="0 0.0 0.22"/>
+      <material name="green">
+        <color rgba="0 0.8 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1000.0" lower="-1.727" upper="1.57" velocity="0.25"/>
+    <origin rpy="0.0 0. 0" xyz="0 0 0.09"/>
+    <parent link="bl"/>
+    <child link="link1"/>
+  </joint>
+
+  <link name="link2">
+    <visual>
+      <geometry>
+        <box size="0.03 0.43 0.07"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0.15 0"/>
+      <material name="magenta">
+        <color rgba="0.8 0 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="link_virtual">
+    <visual>
+      <geometry>
+        <box size="0.03 0.01 0.07"/>
+      </geometry>
+      <origin rpy="0 0 1.57" xyz="0 0.0 0"/>
+      <material name="magenta">
+        <color rgba="0.8 0 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- <link name="link_virtual">
+    <origin rpy="0 0 0" xyz="0 0.15 0"/>
+  </link> -->
+
+    <!-- 0.28 was the original value, subtracted pi/2 -->
+  <joint name="joint2" type="revolute">
+    <axis xyz="1 0 0 "/>
+    <limit effort="1000.0" lower="-2.6" upper="2.6" velocity="0.25"/>
+    <origin rpy="-1.29 0 0" xyz="0 0.0 0.43"/>
+
+    <parent link="link1"/>
+    <child link="link_virtual"/>
+  </joint>
+
+  <joint name="joint3" type="revolute">
+    <axis xyz="0 1 0 "/>
+    <limit effort="1000.0" lower="-3.61" upper="3.61" velocity="0.25"/>
+    <origin rpy="0 0 0" xyz="0 0.0 0.0"/>
+    <parent link="link_virtual"/>
+    <child link="link2"/>
+  </joint>
+
+  <link name="link3">
+    <visual>
+      <geometry>
+        <box size="0.03 0.1 0.07"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0.03 0.0"/>
+      <material name="yellow">
+        <color rgba="0.8 0.8 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint4" type="revolute">
+    <axis xyz="1 0 0 "/>
+    <limit effort="1000.0" lower="-1.64" upper="1.64" velocity="0.25"/>
+    <origin rpy="0 0 0" xyz="0 0.38 0.0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+  </joint>
+
+  <link name="link4">
+    <visual>
+      <geometry>
+        <box size="0.03 0.1 0.03"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0.03 0.0"/>
+    </visual>
+  </link>
+
+  <joint name="joint5" type="revolute">
+    <axis xyz="0 1 0 "/>
+    <limit effort="1000.0" lower="-2.44" upper="2.44" velocity="0.25"/>
+    <origin rpy="0 0 0" xyz="0 0.1 0.0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+  </joint>
+
+  <link name="camera_link">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </link>
+  <joint name="kinect_joint1" type="fixed">
+    <parent link="main_body"/>
+    <child link="camera_link"/>
+    <origin rpy="1.57079632679 0 1.57079632679" xyz="0.275 0.0 0.3"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+</robot>
